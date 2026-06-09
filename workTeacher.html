@@ -16,8 +16,6 @@
             justify-content: center;
             align-items: center;
         }
-
-        /* 强制弹窗遮罩 */
         #overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -28,7 +26,6 @@
             align-items: center;
             flex-direction: column;
         }
-
         .modal {
             background: #2d2d2d;
             padding: 40px;
@@ -39,10 +36,8 @@
             text-align: center;
             box-shadow: 0 0 30px rgba(255,68,68,0.3);
         }
-
         .modal h1 { color: #ff4444; margin-bottom: 20px; font-size: 24px; }
         .modal p { margin-bottom: 15px; line-height: 1.6; color: #ccc; }
-        
         .accept-btn {
             background: #ff4444;
             color: #fff;
@@ -56,8 +51,6 @@
             font-weight: bold;
         }
         .accept-btn:hover { background: #cc0000; transform: scale(1.05); }
-
-        /* 拒绝按钮的整蛊效果 */
         .reject-btn {
             background: transparent;
             border: 1px solid #666;
@@ -69,8 +62,6 @@
             margin-top: 10px;
             position: relative;
         }
-
-        /* 作业内容区 */
         #content { display: none; padding: 40px; max-width: 800px; width: 100%; }
         .header { 
             text-align: center; 
@@ -80,7 +71,6 @@
         }
         .header h1 { color: #ff4444; font-size: 32px; margin-bottom: 10px; }
         .header p { color: #888; font-size: 14px; }
-
         .task-card {
             background: #2d2d2d;
             padding: 25px;
@@ -90,7 +80,6 @@
         }
         .task-card h3 { color: #ff4444; margin-bottom: 10px; }
         .task-card p { color: #ccc; line-height: 1.8; }
-
         .warning {
             text-align: center;
             color: #ff4444;
@@ -98,10 +87,7 @@
             margin-top: 30px;
             animation: blink 1s infinite;
         }
-
         @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-        /* 弹幕效果 */
         .danmaku {
             position: fixed;
             color: rgba(255,68,68,0.3);
@@ -114,7 +100,6 @@
 </head>
 <body>
 
-    <!-- 强制弹窗 -->
     <div id="overlay">
         <div class="modal">
             <h1>🔔 英语老师の强制通知</h1>
@@ -126,51 +111,23 @@
         </div>
     </div>
 
-    <!-- 作业内容 -->
     <div id="content">
         <div class="header">
             <h1>📚 今日英语作业</h1>
             <p>既然你点了接受，那就乖乖做完吧 😈</p>
         </div>
 
-        <div class="task-card">
-            <h3>📝 Task 1: 词汇地狱</h3>
-            <p>背诵 Unit 5 全部 50 个单词，并默写 3 遍。<br>
-            <span style="color:#ff4444; font-size:12px;">（别想着只写一遍，我会抽查笔迹深浅的）</span></p>
-        </div>
-
-        <div class="task-card">
-            <h3>📝 Task 2: 阅读马拉松</h3>
-            <p>完成练习册 P45-P48 的阅读理解。<br>
-            <span style="color:#ff4444; font-size:12px;">（错题超过 3 个的同学，明天上课请站起来朗读全文）</span></p>
-        </div>
-
-        <div class="task-card">
-            <h3>📝 Task 3: 灵魂写作</h3>
-            <p>用英语写一篇 150 词短文：《Why I Love English Homework》<br>
-            <span style="color:#ff4444; font-size:12px;">（题目没看错，就是《我为什么热爱英语作业》，真情实感，不许抄袭）</span></p>
-        </div>
+        <div id="taskContainer"></div>
 
         <p class="warning">⚠️ 本页面已截图存档，未按时完成者将被英语老师の死亡凝视锁定 ⚠️</p>
     </div>
 
     <script>
-        // 阻止右键、F12、快捷键
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                e.preventDefault();
-            }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) e.preventDefault();
         });
 
-        // 接受命运
-        function acceptFate() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('content').style.display = 'block';
-            startDanmaku();
-        }
-
-        // 拒绝按钮逃跑整蛊
         function runAway(btn) {
             const x = Math.random() * (window.innerWidth - 100);
             const y = Math.random() * (window.innerHeight - 50);
@@ -180,7 +137,6 @@
             btn.style.transition = 'all 0.1s';
         }
 
-        // 弹幕效果
         function startDanmaku() {
             const texts = [
                 "拒绝无效！", "接受命运吧！", "英语老师正在注视你",
@@ -188,7 +144,6 @@
                 "右键？不存在的", "乖乖写作业", "Love English, Love Life",
                 "你逃不掉的", "Deadline is coming", "No excuses!"
             ];
-            
             setInterval(() => {
                 const d = document.createElement('div');
                 d.className = 'danmaku';
@@ -196,15 +151,44 @@
                 d.style.top = Math.random() * window.innerHeight + 'px';
                 d.style.right = '-200px';
                 document.body.appendChild(d);
-
                 const duration = 5000 + Math.random() * 5000;
                 d.animate([
                     { transform: 'translateX(0)' },
                     { transform: `translateX(-${window.innerWidth + 300}px)` }
                 ], { duration, easing: 'linear' });
-
                 setTimeout(() => d.remove(), duration);
             }, 800);
+        }
+
+        function renderTasks(tasks) {
+            const container = document.getElementById('taskContainer');
+            container.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const card = document.createElement('div');
+                card.className = 'task-card';
+                card.innerHTML = `
+                    <h3>📝 Task ${index + 1}: ${task.title}</h3>
+                    <p>
+                        ${task.content}<br>
+                        <span style="color:#ff4444;font-size:12px;">
+                            (${task.note || ''})
+                        </span>
+                    </p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function acceptFate() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+
+            fetch('tasks.json')
+                .then(response => response.json())
+                .then(data => renderTasks(data))
+                .catch(err => console.error('加载作业失败:', err));
+
+            startDanmaku();
         }
     </script>
 </body>
